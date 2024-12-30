@@ -1,0 +1,17 @@
+body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: brown;
+      color: blue;
+}
+.container {
+  margin-top: -250px;
+}
+body {
+    background-image: url("/static/images/happy.png");
+	
+    background-size: cover;
+}

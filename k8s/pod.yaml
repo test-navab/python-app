@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: python
+  name: python
+spec:
+  containers:
+  - image: navabnaeem/python-users-data:v1
+    name: python
+    env:
+    - name: DB_HOST
+      value: mysql.default.svc.cluster.local
+    - name: DB_PORT
+      value: '80'    
+    - name: DB_USER
+      value: navab
+    - name: DB_PASS
+      value: admin
+    - name: DB_NAME
+      value: users    
