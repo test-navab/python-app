@@ -33,3 +33,18 @@ jobs:
       run: |
         docker build -t ghcr.io/${{ github.repository_owner }}/${REPO_NAME}-${BRANCH_NAME}:${{ env.commit_sha }} .
         docker push ghcr.io/${{ github.repository_owner }}/${REPO_NAME}-${BRANCH_NAME}:${{ env.commit_sha }}
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H 80.248.196.125 -p 30102 >> ~/.ssh/known_hosts
+
+    - name: Deploy with Ansible
+      env:
+        BUILD_NUMBER: ${{ github.run_number }}
+        ProjectName: ${{ github.event.repository.name }}
+      run: |
+        ssh -o StrictHostKeyChecking=no -p 30102 jenkins@80.248.196.125 \
+        "ansible-playbook /var/lib/jenkins/github-actions/main.yaml -e tag=${BUILD_NUMBER} -e ProjectName=${ProjectName}"
