@@ -39,7 +39,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H 80.248.196.125 -p 30102 >> ~/.ssh/known_hosts
+        ssh-keyscan -p 30102 80.248.196.125 >> ~/.ssh/known_hosts
 
     - name: Deploy with Ansible
       env:
