@@ -1,0 +1,15 @@
+---
+- name: Hello World Playbook
+  hosts: jenkins
+  gather_facts: no
+
+  tasks:
+    - name: Print Hello World
+      debug:
+        msg: "Hello World"
+
+    - name: Create a file at a specific location
+      ansible.builtin.file:
+        path: "/var/lib/jenkins/github-actions/file.txt"   # Replace with your desired file path
+        state: touch                     # 'touch' will create an empty file if it does not exist
+        mode: '0644'
