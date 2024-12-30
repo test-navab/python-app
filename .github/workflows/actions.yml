@@ -20,10 +20,10 @@ jobs:
         CR_PAT_SECRET: ${{ secrets.CR_PAT }}
       run: echo $CR_PAT_SECRET | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-    # - name: Set image tags
-    #   id: vars
-    #   run: |
-    #     echo "commit_sha=$(echo $GITHUB_SHA | head -c 8)" >> $GITHUB_ENV
+    - name: Set image tags
+      id: vars
+      run: |
+        echo "commit_sha=$(echo $GITHUB_SHA | head -c 8)" >> $GITHUB_ENV
 
 
     - name: Build and Push Docker Image
