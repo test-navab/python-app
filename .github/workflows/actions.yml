@@ -20,33 +20,12 @@ jobs:
         CR_PAT_SECRET: ${{ secrets.CR_PAT }}
       run: echo $CR_PAT_SECRET | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-    - name: Set image tags
-      id: vars
-      run: |
-        echo "commit_sha=$(echo $GITHUB_SHA | head -c 8)" >> $GITHUB_ENV
+    # - name: Set image tags
+    #   id: vars
+    #   run: |
+    #     echo "commit_sha=$(echo $GITHUB_SHA | head -c 8)" >> $GITHUB_ENV
 
-    - name: Build Docker images
-      env:
-        REPO_NAME: ${{ github.event.repository.name }}
-        BRANCH_NAME: ${{ github.ref_name }}
+    - name: Build and Push Docker Image
       run: |
-        # Normalize branch name (replace '/' or other invalid characters with '-')
-        NORMALIZED_BRANCH=$(echo "${BRANCH_NAME}" | sed 's/[\/]/-/g')
-        
-        # Build the image with commit SHA
-        docker build -t ghcr.io/${REPO_NAME}-${NORMALIZED_BRANCH}:${{ env.commit_sha }} .
-        
-        # Tag the image as 'latest'
-        docker tag ghcr.io/${REPO_NAME}-${NORMALIZED_BRANCH}:${{ env.commit_sha }} ghcr.io/${REPO_NAME}-${NORMALIZED_BRANCH}:latest
-
-    - name: Push Docker images
-      env:
-        REPO_NAME: ${{ github.event.repository.name }}
-        BRANCH_NAME: ${{ github.ref_name }}
-      run: |
-        # Normalize branch name (replace '/' or other invalid characters with '-')
-        NORMALIZED_BRANCH=$(echo "${BRANCH_NAME}" | sed 's/[\/]/-/g')
-        
-        # Push the images
-        docker push ghcr.io/${REPO_NAME}-${NORMALIZED_BRANCH}:${{ env.commit_sha }}
-        docker push ghcr.io/${REPO_NAME}-${NORMALIZED_BRANCH}:latest
+        docker build -t ghcr.io/${{ github.repository_owner }}/python-app-beta:latest .
+        docker push ghcr.io/${{ github.repository_owner }}/python-app-beta:latest
