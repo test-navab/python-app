@@ -17,8 +17,8 @@ jobs:
 
     - name: Login to GitHub Container Registry
       env:
-        GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
-      run: echo $GITHUB_ACCESS_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        CR_PAT_SECRET: ${{ secrets.CR_PAT }}
+      run: echo $CR_PAT_SECRET | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     - name: Set image tags
       id: vars
