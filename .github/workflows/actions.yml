@@ -14,8 +14,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Log in to GitHub Container Registry
-      run: echo "${{ secrets.GITHUB_ACCESS_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Login to GitHub Container Registry
+      env:
+        CR_PAT: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+      run: echo $GITHUB_ACCESS_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     - name: Set image tags
       id: vars
