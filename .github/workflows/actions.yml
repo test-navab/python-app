@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: jenkins-beta
+    runs-on: self-hosted
 
     steps:
     - name: Checkout repository
