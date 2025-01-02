@@ -55,4 +55,4 @@ jobs:
         ANSIBLE_HOST_KEY_CHECKING: False
         REPO_NAME: ${{ github.event.repository.name }}
       run: |
-        ansible-playbook -i inventory/hosts.ini playbooks/main.yml -e tag=${{ env.commit_sha }} -e ProjectName=${REPO_NAME} -u ${{ secrets.ANSIBLE_USER }}
+        ansible-playbook -i inventory/hosts.ini playbooks/main.yml -e tag=${{ env.commit_sha }} -e ProjectName=${REPO_NAME}
