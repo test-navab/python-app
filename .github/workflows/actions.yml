@@ -49,7 +49,8 @@ jobs:
         echo "${{ vars.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
         chmod 600 ~/.ssh/id_rsa
         chmod 644 ~/.ssh/id_rsa.pub
-        ssh-keyscan -H 80.248.196.125 -p 30111 >> ~/.ssh/known_hosts
+
+        ssh -p 30111 ubuntu@80.248.196.125
 
     - name: Run Ansible Playbook
       env:
