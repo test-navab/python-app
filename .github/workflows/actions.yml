@@ -48,7 +48,6 @@ jobs:
     - name: executing remote ssh commands using ssh key
       env:
         REPO_NAME: ${{ github.event.repository.name }}
-        COMMIT_SHA: ${{ github.sha }}
       uses: appleboy/ssh-action@v1.2.0
       with:
         host: 80.248.196.125
@@ -62,7 +61,7 @@ jobs:
           destDir="/home/ubuntu/github-actions/python-app/helmtemplate"
           root="/home/ubuntu/github-actions/python-app"
           ProjectName="${{ env.REPO_NAME }}"
-          tag="${{ env.COMMIT_SHA }}"
+          tag="${{ env.commit_sha }}"
 
           # Update Chart.yaml
           /usr/local/bin/yq e ".name = \"$ProjectName\"" -i "$destDir/Chart.yaml"
