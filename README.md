@@ -123,3 +123,10 @@ docker run --name mysql --network=my-net -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DA
 # NOTE:
    # we need deploy both containers in custom netwrok only then only communicate with dns ispossible
 
+
+
+kubectl create secret docker-registry github-docker-secret \
+  --docker-server=ghcr.io \
+  --docker-username=shariff-edx \
+  --docker-password= \
+  --docker-email=n.shaik@edexa.team
