@@ -35,12 +35,12 @@ jobs:
     #     docker push ghcr.io/${{ github.repository_owner }}/${REPO_NAME}-${BRANCH_NAME}:${{ env.commit_sha }}
 
 
-    - name: Install Ansible
-      shell: bash
-      run: |
-        sudo apt update
-        sudo apt install -y ansible
-        ansible --version
+    # - name: Install Ansible
+    #   shell: bash
+    #   run: |
+    #     sudo apt update
+    #     sudo apt install -y ansible
+    #     ansible --version
 
     - name: Set up SSH
       run: |
@@ -49,6 +49,7 @@ jobs:
         echo "${{ vars.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
         chmod 600 ~/.ssh/id_rsa
         chmod 644 ~/.ssh/id_rsa.pub
+        ssh-keyscan -p 30111 -H 80.248.196.125 >> ~/.ssh/known_hosts
 
         ssh -p 30111 ubuntu@80.248.196.125
 
