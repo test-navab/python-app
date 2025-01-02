@@ -69,7 +69,7 @@ jobs:
       with:
         host: 80.248.196.125
         username: ${{ env.USER_NAME }}
-        key: ${{ env.SSH_KEY }}
+        key: ${{ env.SSH_KEY | fromJson | atob }}
         port: ${{ env.PORT }}
         script: |
           #!/bin/bash
