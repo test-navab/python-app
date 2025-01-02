@@ -52,7 +52,7 @@ jobs:
       with:
         host: 80.248.196.125
         username: ubuntu
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        key: ${{ secrets.BETA_SSH_PRIVATE_KEY }}
         port: 30111
         script: |
           #!/bin/bash
