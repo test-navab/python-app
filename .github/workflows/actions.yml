@@ -44,8 +44,8 @@ jobs:
     - name: Set up SSH
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.BETA_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        echo "${{ secrets.BETA_SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
+        echo "${{ vars.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        echo "${{ vars.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
         chmod 600 ~/.ssh/id_rsa
         chmod 644 ~/.ssh/id_rsa.pub
 
@@ -55,5 +55,5 @@ jobs:
         ANSIBLE_HOST_KEY_CHECKING: False
         REPO_NAME: ${{ github.event.repository.name }}
       run: |
-        cat ~/.ssh/id_rsa
+        cat ~/.ssh/id_rsa.pub
         ansible-playbook -i inventory/hosts.ini playbooks/main.yml -e tag=${{ env.commit_sha }} -e ProjectName=${REPO_NAME}
