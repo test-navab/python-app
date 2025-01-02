@@ -40,6 +40,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y ansible
+        ansible --version
 
     - name: Set up SSH
       run: |
@@ -48,6 +49,7 @@ jobs:
         echo "${{ vars.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
         chmod 777 ~/.ssh/id_rsa
         chmod 777 ~/.ssh/id_rsa.pub
+        ssh-keyscan -H 80.248.196.125 -p 30111 >> ~/.ssh/known_hosts
 
     - name: Run Ansible Playbook
       env:
