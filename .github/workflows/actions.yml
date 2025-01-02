@@ -34,13 +34,42 @@ jobs:
         docker push ghcr.io/${{ github.repository_owner }}/${REPO_NAME}-${BRANCH_NAME}:${{ env.commit_sha }}
 
 
+    # - name: executing remote ssh commands using ssh key
+    #   env:
+    #     REPO_NAME: ${{ github.event.repository.name }}
+    #   uses: appleboy/ssh-action@v1.2.0
+    #   with:
+    #     host: 80.248.196.125
+    #     username: jenkins
+    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     port: 30102
+    #     script: ansible-playbook /var/lib/jenkins/cicd/github-actions/main.yaml -e tag=${{ env.commit_sha }} -e ProjectName=${{ env.REPO_NAME }}
+
     - name: executing remote ssh commands using ssh key
       env:
         REPO_NAME: ${{ github.event.repository.name }}
+        COMMIT_SHA: ${{ github.sha }}
       uses: appleboy/ssh-action@v1.2.0
       with:
         host: 80.248.196.125
-        username: jenkins
+        username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 30102
-        script: ansible-playbook /var/lib/jenkins/cicd/github-actions/main.yaml -e tag=${{ env.commit_sha }} -e ProjectName=${{ env.REPO_NAME }}
+        port: 30111
+        script: |
+          #!/bin/bash
+
+          # Define variables
+          destDir="/home/ubuntu/github-actions/python-app/helmtemplate"
+          root="/home/ubuntu/github-actions/python-app"
+          ProjectName="${{ env.REPO_NAME }}"
+          tag="${{ env.COMMIT_SHA }}"
+
+          # Update Chart.yaml
+          /usr/local/bin/yq e ".name = \"$ProjectName\"" -i "$destDir/Chart.yaml"
+          /usr/local/bin/yq e ".appVersion = \"$tag\"" -i "$destDir/Chart.yaml"
+
+          # Execute collect_host_alias.sh
+          /bin/bash "$root/collect_host_alias.sh" "$root"
+
+          # Helm upgrade
+          /usr/local/bin/helm upgrade "$ProjectName" --install "$destDir" --set deployment.imagetag="$tag"
