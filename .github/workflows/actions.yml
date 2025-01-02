@@ -25,6 +25,7 @@ jobs:
       run: |
         echo "commit_sha=$(echo $GITHUB_SHA | head -c 8)" >> $GITHUB_ENV
 
+
     - name: Build and Push Docker Image
       env:
         REPO_NAME: ${{ github.event.repository.name }}
@@ -45,15 +46,31 @@ jobs:
     #     port: 30102
     #     script: ansible-playbook /var/lib/jenkins/cicd/github-actions/main.yaml -e tag=${{ env.commit_sha }} -e ProjectName=${{ env.REPO_NAME }}
 
+    - name: Set environment variables based on branch
+      id: set-env
+      run: |
+        if [ "${{ github.ref_name }}" == "beta" ]; then
+          echo "SSH_KEY=${{ secrets.BETA_SSH_PRIVATE_KEY }}" >> $GITHUB_ENV
+          echo "PORT=30111" >> $GITHUB_ENV
+          echo "USER_NAME=ubuntu" >> $GITHUB_ENV
+        elif [ "${{ github.ref_name }}" == "live" ]; then
+          echo "SSH_KEY=${{ secrets.LIVE_SSH_PRIVATE_KEY }}" >> $GITHUB_ENV
+          echo "PORT=30121" >> $GITHUB_ENV
+          echo "USER_NAME=edexauniverse" >> $GITHUB_ENV
+        else
+          echo "Unsupported branch: ${{ github.ref_name }}"
+          exit 1
+        fi
+
     - name: executing remote ssh commands using ssh key
       env:
         REPO_NAME: ${{ github.event.repository.name }}
       uses: appleboy/ssh-action@v1.2.0
       with:
         host: 80.248.196.125
-        username: ubuntu
-        key: ${{ secrets.BETA_SSH_PRIVATE_KEY }}
-        port: 30111
+        username: ${{ env.USER_NAME }}
+        key: ${{ env.SSH_KEY }}
+        port: ${{ env.PORT }}
         script: |
           #!/bin/bash
 
@@ -72,3 +89,31 @@ jobs:
 
           # Helm upgrade
           /usr/local/bin/helm upgrade "$ProjectName" --install "$destDir" --set deployment.imagetag="$tag"
+
+    # - name: executing remote ssh commands using ssh key
+    #   env:
+    #     REPO_NAME: ${{ github.event.repository.name }}
+    #   uses: appleboy/ssh-action@v1.2.0
+    #   with:
+    #     host: 80.248.196.125
+    #     username: ubuntu
+    #     key: ${{ secrets.BETA_SSH_PRIVATE_KEY }}
+    #     port: 30111
+    #     script: |
+    #       #!/bin/bash
+
+    #       # Define variables
+    #       destDir="/home/ubuntu/github-actions/python-app/helmtemplate"
+    #       root="/home/ubuntu/github-actions/python-app"
+    #       ProjectName="${{ env.REPO_NAME }}"
+    #       tag="${{ env.commit_sha }}"
+
+    #       # Update Chart.yaml
+    #       /usr/local/bin/yq e ".name = \"$ProjectName\"" -i "$destDir/Chart.yaml"
+    #       /usr/local/bin/yq e ".appVersion = \"$tag\"" -i "$destDir/Chart.yaml"
+
+    #       # Execute collect_host_alias.sh
+    #       /bin/bash "$root/collect_host_alias.sh" "$root"
+
+    #       # Helm upgrade
+    #       /usr/local/bin/helm upgrade "$ProjectName" --install "$destDir" --set deployment.imagetag="$tag"
