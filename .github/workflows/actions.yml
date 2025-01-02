@@ -50,11 +50,9 @@ jobs:
       id: set-env
       run: |
         if [ "${{ github.ref_name }}" == "beta" ]; then
-          echo "SSH_KEY=$(echo '${{ secrets.BETA_SSH_PRIVATE_KEY }}' | base64 -w 0)" >> $GITHUB_ENV
           echo "PORT=30111" >> $GITHUB_ENV
           echo "USER_NAME=ubuntu" >> $GITHUB_ENV
         elif [ "${{ github.ref_name }}" == "live" ]; then
-          echo "SSH_KEY=$(echo '${{ secrets.LIVE_SSH_PRIVATE_KEY }}' | base64 -w 0)" >> $GITHUB_ENV
           echo "PORT=30121" >> $GITHUB_ENV
           echo "USER_NAME=edexauniverse" >> $GITHUB_ENV
         else
@@ -69,7 +67,7 @@ jobs:
       with:
         host: 80.248.196.125
         username: ${{ env.USER_NAME }}
-        key: ${{ env.SSH_KEY | fromJson | atob }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ env.PORT }}
         script: |
           #!/bin/bash
