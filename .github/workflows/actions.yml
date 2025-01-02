@@ -60,13 +60,13 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 30111
-        script: whoami
+        script: ls -l ~/
 
-    - name: Run Ansible Playbook
-      env:
-        ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
-        ANSIBLE_HOST_KEY_CHECKING: False
-        REPO_NAME: ${{ github.event.repository.name }}
-      run: |
-        cat ~/.ssh/id_rsa.pub
-        ansible-playbook -i inventory/hosts.ini playbooks/main.yml -e tag=${{ env.commit_sha }} -e ProjectName=${REPO_NAME}
+    # - name: Run Ansible Playbook
+    #   env:
+    #     ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
+    #     ANSIBLE_HOST_KEY_CHECKING: False
+    #     REPO_NAME: ${{ github.event.repository.name }}
+    #   run: |
+    #     cat ~/.ssh/id_rsa.pub
+    #     ansible-playbook -i inventory/hosts.ini playbooks/main.yml -e tag=${{ env.commit_sha }} -e ProjectName=${REPO_NAME}
