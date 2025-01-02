@@ -51,7 +51,7 @@ jobs:
         chmod 644 ~/.ssh/id_rsa.pub
         ssh-keyscan -p 30111 -H 80.248.196.125 >> ~/.ssh/known_hosts
 
-        ssh -p 30111 ubuntu@80.248.196.125
+        ssh -o StrictHostKeyChecking=no -p 30111 ubuntu@80.248.196.125
 
     - name: Run Ansible Playbook
       env:
