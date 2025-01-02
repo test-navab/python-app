@@ -41,7 +41,7 @@ jobs:
       uses: appleboy/ssh-action@v1.2.0
       with:
         host: 80.248.196.125
-        username: ubuntu
+        username: jenkins
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 30102
         script: ansible-playbook /var/lib/jenkins/cicd/github-actions/main.yaml -e tag=${{ env.commit_sha }} -e ProjectName=${REPO_NAME}
