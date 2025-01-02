@@ -60,7 +60,10 @@ jobs:
           exit 1
         fi
 
-        echo ${{ env.USER_NAME }}
+    - name: Print environment variables
+      run: |
+        echo "PORT: ${{ env.PORT }}"
+        echo "USER_NAME: ${{ env.USER_NAME }}"
 
     # - name: executing remote ssh commands using ssh key
     #   env:
