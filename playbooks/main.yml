@@ -1,15 +1,20 @@
 ---
-- name: Hello World Playbook
-  hosts: jenkins
-  gather_facts: no
-
+- hosts: edxsanboxapi
+  become: yes
+  gather_facts: false
+  vars:
+    destDir: /home/ubuntu/citynex-beta/citynex-api-beta/helmtemplate
+    root: /home/ubuntu/citynex-beta/citynex-api-beta
+    envDir: /home/ubuntu/citynex-beta/citynex-api-beta/helmtemplate/env
   tasks:
-    - name: Print Hello World
-      debug:
-        msg: "Hello World"
 
-    - name: Create a file at a specific location
-      ansible.builtin.file:
-        path: "/var/lib/jenkins/github-actions/file.txt"   # Replace with your desired file path
-        state: touch                     # 'touch' will create an empty file if it does not exist
-        mode: '0644'
+    - name: Chart Update
+      command: "{{ item }} chdir={{destDir}}"
+      become: true
+      become_user: ubuntu
+      with_items:
+        - /usr/local/bin/yq e '.name = "{{ProjectName}}"' -i Chart.yaml
+        - /usr/local/bin/yq e '.appVersion = "{{tag}}"' -i Chart.yaml
+        - /bin/bash {{root}}/collect_host_alias.sh {{root}}
+      tags:
+        - chart
