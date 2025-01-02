@@ -26,13 +26,13 @@ jobs:
         echo "commit_sha=$(echo $GITHUB_SHA | head -c 8)" >> $GITHUB_ENV
 
 
-    # - name: Build and Push Docker Image
-    #   env:
-    #     REPO_NAME: ${{ github.event.repository.name }}
-    #     BRANCH_NAME: ${{ github.ref_name }}
-    #   run: |
-    #     docker build -t ghcr.io/${{ github.repository_owner }}/${REPO_NAME}-${BRANCH_NAME}:${{ env.commit_sha }} .
-    #     docker push ghcr.io/${{ github.repository_owner }}/${REPO_NAME}-${BRANCH_NAME}:${{ env.commit_sha }}
+    - name: Build and Push Docker Image
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        BRANCH_NAME: ${{ github.ref_name }}
+      run: |
+        docker build -t ghcr.io/${{ github.repository_owner }}/${REPO_NAME}-${BRANCH_NAME}:${{ env.commit_sha }} .
+        docker push ghcr.io/${{ github.repository_owner }}/${REPO_NAME}-${BRANCH_NAME}:${{ env.commit_sha }}
 
 
     # - name: executing remote ssh commands using ssh key
@@ -60,63 +60,31 @@ jobs:
           exit 1
         fi
 
-    - name: Print environment variables
-      run: |
-        echo "PORT: ${{ env.PORT }}"
-        echo "USER_NAME: ${{ env.USER_NAME }}"
 
-    # - name: executing remote ssh commands using ssh key
-    #   env:
-    #     REPO_NAME: ${{ github.event.repository.name }}
-    #   uses: appleboy/ssh-action@v1.2.0
-    #   with:
-    #     host: 80.248.196.125
-    #     username: ${{ env.USER_NAME }}
-    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-    #     port: ${{ env.PORT }}
-    #     script: |
-    #       #!/bin/bash
+    - name: executing remote ssh commands using ssh key
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: 80.248.196.125
+        username: ${{ env.USER_NAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ env.PORT }}
+        script: |
+          #!/bin/bash
 
-    #       # Define variables
-    #       destDir="/home/ubuntu/github-actions/python-app/helmtemplate"
-    #       root="/home/ubuntu/github-actions/python-app"
-    #       ProjectName="${{ env.REPO_NAME }}"
-    #       tag="${{ env.commit_sha }}"
+          # Define variables
+          destDir="/home/ubuntu/github-actions/python-app/helmtemplate"
+          root="/home/ubuntu/github-actions/python-app"
+          ProjectName="${{ env.REPO_NAME }}"
+          tag="${{ env.commit_sha }}"
 
-    #       # Update Chart.yaml
-    #       /usr/local/bin/yq e ".name = \"$ProjectName\"" -i "$destDir/Chart.yaml"
-    #       /usr/local/bin/yq e ".appVersion = \"$tag\"" -i "$destDir/Chart.yaml"
+          # Update Chart.yaml
+          /usr/local/bin/yq e ".name = \"$ProjectName\"" -i "$destDir/Chart.yaml"
+          /usr/local/bin/yq e ".appVersion = \"$tag\"" -i "$destDir/Chart.yaml"
 
-    #       # Execute collect_host_alias.sh
-    #       /bin/bash "$root/collect_host_alias.sh" "$root"
+          # Execute collect_host_alias.sh
+          /bin/bash "$root/collect_host_alias.sh" "$root"
 
-    #       # Helm upgrade
-    #       /usr/local/bin/helm upgrade "$ProjectName" --install "$destDir" --set deployment.imagetag="$tag"
-
-    # - name: executing remote ssh commands using ssh key
-    #   env:
-    #     REPO_NAME: ${{ github.event.repository.name }}
-    #   uses: appleboy/ssh-action@v1.2.0
-    #   with:
-    #     host: 80.248.196.125
-    #     username: ubuntu
-    #     key: ${{ secrets.BETA_SSH_PRIVATE_KEY }}
-    #     port: 30111
-    #     script: |
-    #       #!/bin/bash
-
-    #       # Define variables
-    #       destDir="/home/ubuntu/github-actions/python-app/helmtemplate"
-    #       root="/home/ubuntu/github-actions/python-app"
-    #       ProjectName="${{ env.REPO_NAME }}"
-    #       tag="${{ env.commit_sha }}"
-
-    #       # Update Chart.yaml
-    #       /usr/local/bin/yq e ".name = \"$ProjectName\"" -i "$destDir/Chart.yaml"
-    #       /usr/local/bin/yq e ".appVersion = \"$tag\"" -i "$destDir/Chart.yaml"
-
-    #       # Execute collect_host_alias.sh
-    #       /bin/bash "$root/collect_host_alias.sh" "$root"
-
-    #       # Helm upgrade
-    #       /usr/local/bin/helm upgrade "$ProjectName" --install "$destDir" --set deployment.imagetag="$tag"
+          # Helm upgrade
+          /usr/local/bin/helm upgrade "$ProjectName" --install "$destDir" --set deployment.imagetag="$tag"
