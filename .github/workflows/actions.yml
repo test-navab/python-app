@@ -41,6 +41,28 @@ jobs:
           echo "db_migrate_seed=true" >> $GITHUB_ENV
         fi
 
+
+    - name: Extract commit messages
+      id: extract_commits
+      run: |
+        # Extract the latest commit message
+        commit_message=$(git log --pretty=format:'%s' -n 1)
+        echo "Commit message: $commit_message"
+
+        # Initialize flags
+        db_migrate=false
+        db_seed=false
+        db_migrate_seed=false
+
+        # Prioritize db-migrate-seed over others
+        if echo "$commit_message" | grep -iq 'db-migrate-seed'; then
+          echo "db_migrate_seed=true" >> $GITHUB_ENV
+        elif echo "$commit_message" | grep -iq 'db-migrate'; then
+          echo "db_migrate=true" >> $GITHUB_ENV
+        elif echo "$commit_message" | grep -iq 'db-seed'; then
+          echo "db_seed=true" >> $GITHUB_ENV
+        fi
+
     - name: Print environment variables
       run: |
         echo "db_migrate: $db_migrate"
