@@ -7,41 +7,53 @@ on:
       - beta
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-
-    - name: Login to GitHub Container Registry
-      env:
-        CR_PAT_SECRET: ${{ secrets.CR_PAT }}
-      run: echo $CR_PAT_SECRET | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-
-
-
     - name: Extract commit messages
       id: extract_commits
       run: |
-        # Extract the latest commit message
         commit_message=$(git log --pretty=format:'%s' -n 1)
         echo "Commit message: $commit_message"
-
-        # Initialize flags
+        
+        db_migrate_seed=false
         db_migrate=false
         db_seed=false
-        db_migrate_seed=false
 
-        # Prioritize db-migrate-seed over others
         if echo "$commit_message" | grep -iq 'db-migrate-seed'; then
-          echo "db_migrate_seed=true" >> $GITHUB_ENV
+          db_migrate_seed=true
         elif echo "$commit_message" | grep -iq 'db-migrate'; then
-          echo "db_migrate=true" >> $GITHUB_ENV
+          db_migrate=true
         elif echo "$commit_message" | grep -iq 'db-seed'; then
-          echo "db_seed=true" >> $GITHUB_ENV
+          db_seed=true
+        fi
+
+        echo "::set-output name=db_migrate_seed::$db_migrate_seed"
+        echo "::set-output name=db_migrate::$db_migrate"
+        echo "::set-output name=db_seed::$db_seed"
+    outputs:
+      db_migrate_seed: ${{ steps.extract_commits.outputs.db_migrate_seed }}
+      db_migrate: ${{ steps.extract_commits.outputs.db_migrate }}
+      db_seed: ${{ steps.extract_commits.outputs.db_seed }}
+
+
+  db-migrate:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: needs.build.outputs.db_migrate == 'true' || needs.build.outputs.db_seed == 'true' || needs.build.outputs.db_migrate_seed == 'true'
+    steps:
+    - name: Run DB migration or seed
+      run: |
+        if [ "${{ needs.build.outputs.db_migrate_seed }}" == "true" ]; then
+          echo "Running DB Migrate and Seed"
+        elif [ "${{ needs.build.outputs.db_migrate }}" == "true" ]; then
+          echo "Running DB Migrate"
+        elif [ "${{ needs.build.outputs.db_seed }}" == "true" ]; then
+          echo "Running DB Seed"
         fi
 
     - name: Print environment variables
