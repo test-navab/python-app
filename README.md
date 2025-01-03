@@ -1,3 +1,24 @@
+# GitHub Actions Workflow Status
+
+This repository uses GitHub Actions for CI/CD. Below is the status of each stage in the pipeline:
+
+| Stage        | Status                                                                                          |
+|--------------|-------------------------------------------------------------------------------------------------|
+| **Build**    | ![Build Status](https://github.com/test-navab/python-app/actions/workflows/actions.yml/badge.svg?branch=beta) |
+| **Deploy**   | ![Deploy Status](https://github.com/test-navab/python-app/actions/workflows/actions.yml/badge.svg?branch=beta) |
+| **DB Migrate** | ![DB Migrate Status](https://github.com/test-navab/python-app/actions/workflows/actions.yml/badge.svg?branch=beta) |
+
+### How to Read the Status
+- 🟢 **Green:** The stage completed successfully.
+- 🔴 **Red:** The stage failed.
+- ⚪ **Gray:** The stage was skipped.
+
+---
+
+### Updating Status
+The statuses are dynamically updated whenever a new workflow is triggered for the `beta` or `live` branch.
+
+
 # run flask app in ec2 with systemd service
 
 git clone https://gitlab.com/group-for-devops/python.git demo-project
