@@ -45,7 +45,7 @@ jobs:
       run: |
         echo "db_migrate: $db_migrate"
         echo "db_seed: $db_seed"
-        echo "db_migrate_seed: $db_migrate_seed
+        echo "db_migrate_seed: $db_migrate_seed"
 
     # - name: Set image tags
     #   id: vars
