@@ -25,7 +25,7 @@ jobs:
       id: extract_commits
       run: |
         # Extract all commit messages for the push
-        commits=$(git log --pretty=format:'%s' ${{ github.event.before }}..${{ github.sha }})
+        commits=$(git log --pretty=format:'%s' | head -1)
         echo "Commit messages: $commits"
 
         # Set flags for the keywords
