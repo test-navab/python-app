@@ -21,25 +21,25 @@ jobs:
       run: echo $CR_PAT_SECRET | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
 
-    - name: Extract commit messages
-      id: extract_commits
-      run: |
-        # Extract all commit messages for the push
-        commits=$(git log --pretty=format:'%s' | head -1)
-        echo "Commit messages: $commits"
+    # - name: Extract commit messages
+    #   id: extract_commits
+    #   run: |
+    #     # Extract all commit messages for the push
+    #     commits=$(git log --pretty=format:'%s' | head -1)
+    #     echo "Commit messages: $commits"
 
-        # Set flags for the keywords
-        if echo "$commits" | grep -iq 'db-migrate'; then
-          echo "db_migrate=true" >> $GITHUB_ENV
-        fi
+    #     # Set flags for the keywords
+    #     if echo "$commits" | grep -iq 'db-migrate'; then
+    #       echo "db_migrate=true" >> $GITHUB_ENV
+    #     fi
 
-        if echo "$commits" | grep -iq 'db-seed'; then
-          echo "db_seed=true" >> $GITHUB_ENV
-        fi
+    #     if echo "$commits" | grep -iq 'db-seed'; then
+    #       echo "db_seed=true" >> $GITHUB_ENV
+    #     fi
 
-        if echo "$commits" | grep -iq 'db-migrate-seed'; then
-          echo "db_migrate_seed=true" >> $GITHUB_ENV
-        fi
+    #     if echo "$commits" | grep -iq 'db-migrate-seed'; then
+    #       echo "db_migrate_seed=true" >> $GITHUB_ENV
+    #     fi
 
 
     - name: Extract commit messages
