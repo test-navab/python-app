@@ -127,6 +127,5 @@ docker run --name mysql --network=my-net -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DA
 
 kubectl create secret docker-registry github-docker-secret \
   --docker-server=ghcr.io \
-  --docker-username=shariff-edx \
-  --docker-password= \
-  --docker-email=n.shaik@edexa.team
+  --docker-username= \
+  --docker-password=
