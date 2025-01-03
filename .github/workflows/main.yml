@@ -24,4 +24,4 @@ jobs:
     needs: test
     steps:
       - name: Print Deploy Stage
-        run: echo "Running Deploy Stage"
+        run: exit 1
