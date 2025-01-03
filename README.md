@@ -1,27 +1,10 @@
 # GitHub Actions Workflow Status
 
 
+![Build Status](https://github.com/test-navab/python-app/actions/workflows/main.yml/badge.svg?job=build&branch=beta)                                |
+![Test Status](https://github.com/test-navab/python-app/actions/workflows/main.yml/badge.svg?job=test&branch=beta)                                  |
+![Deploy Status](https://github.com/test-navab/python-app/actions/workflows/main.yml/badge.svg?job=deploy&branch=beta)                              |
 
-# GitHub Actions Workflow Status
-
-This repository uses GitHub Actions to automate the following stages:
-
-| Stage   | Status                                                                                                                                       |
-|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| Build   | ![Build Status](https://github.com/test-navab/python-app/actions/workflows/main.yml/badge.svg?job=build&branch=beta)                                |
-| Test    | ![Test Status](https://github.com/test-navab/python-app/actions/workflows/main.yml/badge.svg?job=test&branch=beta)                                  |
-| Deploy  | ![Deploy Status](https://github.com/test-navab/python-app/actions/workflows/main.yml/badge.svg?job=deploy&branch=beta)                              |
-
-### Explanation of Stages
-
-- **Build**: Compiles the application or sets up the environment.
-- **Test**: Runs tests to ensure everything works as expected.
-- **Deploy**: Deploys the application to a specified environment.
-
-### How to Read the Status
-- 🟢 **Green**: Stage completed successfully.
-- 🔴 **Red**: Stage failed.
-- ⚪ **Gray**: Stage was skipped or hasn't run yet.
 
 
 

@@ -17,11 +17,11 @@ jobs:
     needs: build
     steps:
       - name: Print Test Stage
-        run: echo "Running Test Stage"
+        run: exit 1
 
   deploy:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Print Deploy Stage
-        run: exit 1
+        run: echo "Running deploy Stage"
