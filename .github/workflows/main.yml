@@ -1,27 +1,27 @@
-name: Build, Test, and Deploy
+# name: Build, Test, and Deploy
 
-on:
-  push:
-    branches: 
-      - beta
+# on:
+#   push:
+#     branches: 
+#       - beta
 
-jobs:
-  build:
-    runs-on: self-hosted
-    steps:
-      - name: Print Build Stage
-        run: echo "Running Build Stage"
+# jobs:
+#   build:
+#     runs-on: self-hosted
+#     steps:
+#       - name: Print Build Stage
+#         run: echo "Running Build Stage"
 
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Print Test Stage
-        run: exit 1
+#   test:
+#     runs-on: ubuntu-latest
+#     needs: build
+#     steps:
+#       - name: Print Test Stage
+#         run: exit 1
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Print Deploy Stage
-        run: echo "Running deploy Stage"
+#   deploy:
+#     runs-on: ubuntu-latest
+#     needs: test
+#     steps:
+#       - name: Print Deploy Stage
+#         run: echo "Running deploy Stage"
