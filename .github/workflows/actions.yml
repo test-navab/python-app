@@ -25,7 +25,17 @@ jobs:
 
 
 
+    - name: Install Docker
+      run: |
+        brew install docker
+        brew install colima  # Lightweight Docker runtime for macOS
 
+    - name: Start Docker
+      run: |
+        colima start  # Start Colima to enable Docker daemon
+        docker version  # Verify installation
+
+        
     - name: Set image tags
       id: vars
       run: |
