@@ -39,6 +39,9 @@ jobs:
       run: |
         echo "commit_sha=$(echo $GITHUB_SHA | head -c 8)" >> $GITHUB_ENV
 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
     - name: Set Docker Tags
       id: docker-metadata
       uses: docker/metadata-action@v4
