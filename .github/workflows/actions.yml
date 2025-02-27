@@ -18,13 +18,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Login to GitHub Container Registry
-      env:
-        CR_PAT_SECRET: ${{ secrets.CR_PAT }}
-      run: echo $CR_PAT_SECRET | docker login ghcr.io -u ${{ secrets.CR_PAT_USERNAME }} --password-stdin
-
-
-
     - name: Install Docker
       run: |
         brew install docker
@@ -34,8 +27,13 @@ jobs:
       run: |
         colima start  # Start Colima to enable Docker daemon
         docker version  # Verify installation
+    - name: Login to GitHub Container Registry
+      env:
+        CR_PAT_SECRET: ${{ secrets.CR_PAT }}
+      run: echo $CR_PAT_SECRET | docker login ghcr.io -u ${{ secrets.CR_PAT_USERNAME }} --password-stdin
 
-        
+
+
     - name: Set image tags
       id: vars
       run: |
